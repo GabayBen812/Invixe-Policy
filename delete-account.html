@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="בקשה למחיקת חשבון באפליקציית Invixe." />
+    <title>מחיקת חשבון — Invixe</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a href="index.html" class="logo">Invi<span>xe</span></a>
+        <nav class="site-nav" aria-label="ניווט ראשי">
+          <a href="terms.html">תנאי שימוש</a>
+          <a href="privacy.html">מדיניות פרטיות</a>
+          <a href="accessibility.html">הצהרת נגישות</a>
+          <a href="delete-account.html" aria-current="page">מחיקת חשבון</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="doc">
+      <h1>בקשה למחיקת חשבון</h1>
+      <p class="doc-meta">מלא/י את הפרטים הבאים ונעבד את הבקשה בהקדם האפשרי.</p>
+
+      <section class="notice">
+        <p>
+          <strong>שימ/י לב:</strong> מחיקת החשבון תסיר לצמיתות את פרטי החשבון, ההתקדמות בשיעורים, התיק הווירטואלי
+          ואת היסטוריית העסקאות מהשרתים שלנו. פעולה זו אינה ניתנת לביטול.
+        </p>
+        <p>
+          ניתן גם למחוק חשבון ישירות מתוך האפליקציה: <strong>פרופיל → מחק חשבון</strong>.
+        </p>
+      </section>
+
+      <div id="form-panel">
+        <form id="delete-form" class="form" novalidate>
+          <div class="form-field">
+            <label for="email">כתובת דוא"ל של החשבון <span class="required">*</span></label>
+            <input type="email" id="email" name="email" required autocomplete="email" placeholder="name@example.com" />
+            <p class="field-hint">הכתובת שאיתה נרשמת/ת לאפליקציה.</p>
+          </div>
+
+          <div class="form-field">
+            <label for="reason">סיבת הבקשה (אופציונלי)</label>
+            <select id="reason" name="reason">
+              <option value="">בחר/י סיבה</option>
+              <option value="no-longer-using">אינני משתמש/ת יותר באפליקציה</option>
+              <option value="privacy">חששות פרטיות</option>
+              <option value="duplicate">חשבון כפול</option>
+              <option value="other">אחר</option>
+            </select>
+          </div>
+
+          <div class="form-field">
+            <label for="message">הערות נוספות (אופציונלי)</label>
+            <textarea id="message" name="message" rows="4" placeholder="פרט/י כל מידע שיעזור לנו לזהות את החשבון..."></textarea>
+          </div>
+
+          <div class="form-field form-field--checkbox">
+            <label class="checkbox-label">
+              <input type="checkbox" id="confirm" name="confirm" required />
+              <span>אני מאשר/ת שברצוני למחוק את החשבון שלי ואת כל הנתונים הקשורים אליו לצמיתות.</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary">שליחת בקשה למחיקה</button>
+        </form>
+      </div>
+
+      <div id="success-panel" class="success-panel" hidden>
+        <div class="success-icon" aria-hidden="true">✓</div>
+        <h2>הבקשה נשלחה בהצלחה</h2>
+        <p>
+          קיבלנו את בקשתך למחיקת החשבון. צוות Invixe יעבד אותה ויצור איתך קשר בכתובת
+          <strong id="submitted-email"></strong> בתוך עד 7 ימי עסקים.
+        </p>
+        <p class="reference">מספר פנייה: <strong id="reference-id"></strong></p>
+        <a href="index.html" class="btn btn-secondary">חזרה לדף הבית</a>
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <p>&copy; 2026 Invixe. כל הזכויות שמורות.</p>
+    </footer>
+
+    <script>
+      (function () {
+        var form = document.getElementById("delete-form");
+        var formPanel = document.getElementById("form-panel");
+        var successPanel = document.getElementById("success-panel");
+        var submittedEmail = document.getElementById("submitted-email");
+        var referenceId = document.getElementById("reference-id");
+
+        function generateReferenceId() {
+          var now = new Date();
+          var date = now.toISOString().slice(0, 10).replace(/-/g, "");
+          var random = Math.floor(100000 + Math.random() * 900000);
+          return "INV-DEL-" + date + "-" + random;
+        }
+
+        form.addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          if (!form.checkValidity()) {
+            form.reportValidity();
+            return;
+          }
+
+          var email = document.getElementById("email").value.trim();
+          submittedEmail.textContent = email;
+          referenceId.textContent = generateReferenceId();
+
+          formPanel.hidden = true;
+          successPanel.hidden = false;
+          successPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+      })();
+    </script>
+  </body>
+</html>
